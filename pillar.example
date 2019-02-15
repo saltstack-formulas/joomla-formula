@@ -1,4 +1,5 @@
 joomla:
+    composer_home: '/usr/local/bin/'
     sites:
         sitenameA.com:
             username: siteAuser

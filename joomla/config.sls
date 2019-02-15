@@ -3,7 +3,12 @@
 
 {% from "joomla/map.jinja" import joomla with context %}
 
-{% set cmd_config = "-L {{ salt['pillar.get']('joomla:db:username') }} -H {{ salt['pillar.get']('joomla:db:host') }} -P {{ salt['pillar.get']('joomla:db:port') }} -db {{ salt['pillar.get']('joomla:db:name') }}" %}
-config_joomla:
+{% for name, site in pillar['joomla']['sites'].items() %}
+{% set cmd_config = " --mysql-login='" ~ site.dbuser ~ "' --mysql-host='" ~ site.dbhost ~ "' --mysql-database='" ~ site.database ~ "'" %}
+configure_{{ name }}:
  cmd.run:
-  - name: 'joomla site:configure {{cmd_config}} --overwrite {{ salt['pillar.get']('joomla:site') }}'
+  - name: '/usr/local/bin/joomla site:configure --www={{ joomla.docroot }}/{{ name }} {{cmd_config}} {{ name }}'
+  - cwd: {{ joomla.docroot }}/{{ name }}
+  - user: {{ joomla.www_user }}
+
+{% endfor %}

@@ -133,6 +133,7 @@ provisioner:
                 grants: ['all privileges']  
     joomla.sls:
       joomla:
+        composer_home: '/usr/local/bin/'
         sites:
           sitenameA.com:
             username: siteAuser
